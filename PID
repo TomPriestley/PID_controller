@@ -1,0 +1,22 @@
+m1_speed = motor_left.duty(50)
+m2_speed = motor_right.duty(50)
+ # PID controller code
+while True:
+    ENC_l_error = 70 - enc.get_left()
+    ENC_R_error = 70 - enc.get_right()
+
+    m1_speed += ENC_l_error * 0.02
+    m2_speed += ENC_R_error * 0.02
+
+    m1_speed = max(min(1, m1_speed), 0)
+    m2_speed = max(min(1, m2_speed), 0)
+
+    r.value = (m1_speed, m2_speed)
+
+    print("e1 {} e2 {}".format(e1.value, e2.value))
+    print("m1 {} m2 {}".format(m1_speed, m2_speed))
+
+    e1.reset()
+    e2.reset()
+    sleep(0.5)
+    
