@@ -1,6 +1,20 @@
+from time import sleep
+from motor import Motor
+from encoder import Encoder
+
+# Create left and right `Motor' objects
+motor_left = Motor("left", 8, 9, 6)
+motor_right = Motor("right", 10, 11, 7)
+
+enc_desired_count = 92
+
+# Create encoder object
+ENC_L = 18
+ENC_R = 19
+enc = Encoder(ENC_L, ENC_R)
 m1_speed = motor_left.duty(50)
 m2_speed = motor_right.duty(50)
- # PID controller code
+
 while True:
     ENC_l_error = 70 - enc.get_left()
     ENC_R_error = 70 - enc.get_right()
@@ -11,12 +25,8 @@ while True:
     m1_speed = max(min(1, m1_speed), 0)
     m2_speed = max(min(1, m2_speed), 0)
 
-    r.value = (m1_speed, m2_speed)
-
-    print("e1 {} e2 {}".format(e1.value, e2.value))
+    print("e1 {} e2 {}".format(enc.get_left(), enc.get_right()))
     print("m1 {} m2 {}".format(m1_speed, m2_speed))
 
-    e1.reset()
-    e2.reset()
+    enc.clear_count()
     sleep(0.5)
-    
