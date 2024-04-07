@@ -12,8 +12,15 @@ enc_desired_count = 92
 ENC_L = 18
 ENC_R = 19
 enc = Encoder(ENC_L, ENC_R)
+
 m1_speed = motor_left.duty(50)
 m2_speed = motor_right.duty(50)
+
+ENC_l_prev_error = 0
+ENC_R_prev_error = 0
+
+ENC_l_sum_error = 0
+ENC_R_sum_error = 0
 
 while True:
     ENC_l_error = 70 - enc.get_left()
@@ -30,3 +37,17 @@ while True:
 
     enc.clear_count()
     sleep(0.5)
+
+    m1_speed += (ENC_l_error * 0.02) + (ENC_l_prev_error * 0.1)
+    m2_speed += (ENC_R_error * 0.02) + (ENC_R_prev_error * 0.1)
+
+    sleep(0.5)
+    ENC_l_prev_error = ENC_l_error
+    ENC_R_prev_error = ENC_R_error
+
+    m1_speed += (ENC_l_error * 0.02) + (ENC_l_prev_error * 0.1) + (ENC_l_sum_error * 0.005)
+    m2_speed += (ENC_R_error * 0.02) + (ENC_R_prev_error * 0.1) + (ENC_R_sum_error * 0.005)
+    
+    sleep(0.5)
+    ENC_l_sum_error += ENC_l_error
+    ENC_R_sum_error += ENC_R_error
